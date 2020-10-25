@@ -237,3 +237,7 @@
 .ant-spin-dot-item{
   background-color: #F5EDFA;
 }
+
+.header-span{
+  cursor: pointer;
+}
