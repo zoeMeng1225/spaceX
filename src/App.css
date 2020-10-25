@@ -1,0 +1,68 @@
+.App {
+  text-align: center;
+}
+
+.home-body{
+  background-image: url('./assets/space1.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100vh;
+}
+
+
+.wrapper-child{
+  margin-left: 3em;
+  padding: 1em 2em;
+}
+
+.wrapper-child-child h1{
+  font-weight:800;
+  font-size: 3.5em;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: .3em 0;
+  color: #F5EDFA;
+}
+
+
+.wrapper-child p{
+  font-weight: 100;
+  font-size: 1.5em;
+  margin: 0;
+  color: #f5edfaa6;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+}
+
+.track-Btn:hover{
+  color: #A779F3;
+  background-color: #F5EDFA;
+}
+
+
+.track-Btn{
+  padding:.7em 4em;
+  border-radius: 5px;
+  border: transparent;
+  margin-top: 3em;
+  font-size: 1em;
+  background-color: #A779F3;
+  color: #fff;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.gradual-line{
+  margin: 2em 0;
+  background-image: linear-gradient(to right, #A779F3 , #161F40);
+  height:1px;
+}
+
+
+.logo_space img{
+  width: 100px;
+}
+
+.wrapper-child-child{
+  margin-top: 25%;
+}
+
