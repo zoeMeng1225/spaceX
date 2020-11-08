@@ -1,4 +1,4 @@
-export const SAT_BASE_URL = "https://www.n2yo.com/rest/v1/satellite";
+export const SAT_BASE_URL = "https://tpbackend.zoemeng.info/n2yo";
 export const SAT_API_KEY = "T9ATLA-PWFW74-VEAJH4-4J0F"; 
 
 
