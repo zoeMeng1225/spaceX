@@ -1,69 +1,60 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Starlink Tracker
 
-## Available Scripts
+Find the Starlink satellites above any point on Earth, pick a few, and watch where they go next on a world map.
 
-In the project directory, you can run:
+![Starlink Tracker map view](docs/demo.png)
 
-### `yarn start`
+## What it does
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+1. Enter a location (longitude, latitude, elevation) and a search radius.
+2. The app lists every Starlink satellite currently in range, using the N2YO "above" API (category 52).
+3. Select one or more satellites and press **Track on the map**. The app fetches their next 5 minutes of positions and plays them back on the map at 50× speed, each satellite in its own color, with a clock showing the time being played back.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+## How it's built
 
-### `yarn test`
+- **React 17 + Ant Design** for the UI.
+- **D3 + TopoJSON** for the map. Countries come from `world-atlas` (110m) and are drawn with `d3-geo` on the Kavrayskiy VII projection from `d3-geo-projection`, which keeps both shapes and areas readable on a world view.
+- **Two stacked canvases.** The base map (177 countries plus a graticule) is drawn once. Satellites go on a transparent canvas above it, and only that layer is cleared and redrawn each frame, so playback never redraws the countries.
+- **One shared projection** (`src/projection.js`) for both layers, so every satellite lands on the right spot on the map. Both canvases scale together with CSS, so they stay aligned at any screen width.
+- **API key stays on the server.** The browser only calls `/n2yo/...`. A small proxy adds the N2YO key before forwarding the request: `src/setupProxy.js` in development and a Cloudflare Pages Function (`functions/n2yo/[[path]].js`) in production. The production proxy only forwards the two endpoints the app uses and only accepts numeric parameters, so it can't be used as an open proxy.
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Run locally
 
-### `yarn build`
+Requires Node 18 or newer and a free N2YO API key from [n2yo.com/api](https://www.n2yo.com/api/).
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+git clone https://github.com/zoeMeng1225/spaceX.git
+cd spaceX
+npm install
+cp .env.example .env.local   # then paste your key into .env.local
+npm start
+```
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+Then open http://localhost:3000.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Deploy to Cloudflare Pages
 
-### `yarn eject`
+1. Connect the repo in Cloudflare Pages.
+2. Build command: `npm run build`. Output directory: `build`.
+3. Under **Settings → Environment variables**, add `N2YO_API_KEY`.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+The `functions/` folder is picked up automatically and serves `/n2yo/*`.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Limits
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+N2YO returns at most 300 seconds of positions per request, which is why tracking is capped at 5 minutes. The free tier also allows 100 "above" and 1,000 "positions" requests per hour.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## History
 
-## Learn More
+Originally built in 2020. Updated in 2026:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- Moved the API key out of the source code and behind a server-side proxy.
+- Fixed satellites being drawn at a different map scale than the countries (they now share one projection).
+- Fixed the playback clock, per-satellite colors, the loading spinner, and the satellite checkboxes staying checked after a new search.
+- Capped track duration at N2YO's 300-second limit.
+- Bundled the world map data instead of fetching it from a CDN at runtime, and compressed the background image from 3.1 MB to 185 KB.
+- Upgraded to Create React App 5 so it builds on current Node versions.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
 
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
-# spaceX
+A personal project. Not affiliated with SpaceX or Starlink. Satellite data from [N2YO.com](https://www.n2yo.com/).
