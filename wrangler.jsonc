@@ -1,0 +1,11 @@
+{
+  "name": "starlink-tracker",
+  "main": "worker/index.js",
+  "compatibility_date": "2025-09-01",
+  "assets": {
+    "directory": "./build",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/n2yo/*"]
+  }
+}
